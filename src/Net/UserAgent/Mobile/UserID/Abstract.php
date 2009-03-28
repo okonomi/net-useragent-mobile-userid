@@ -20,6 +20,9 @@ abstract class Net_UserAgent_Mobile_UserID_Abstract
             throw new Net_UserAgent_Mobile_UserID_Exception();
         }
 
-        return $this->_parseID($id);
+        $ret = $this->_parseID($id);
+        $ret[] = $id;
+
+        return $ret;
     }
 }

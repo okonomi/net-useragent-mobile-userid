@@ -15,6 +15,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('', $userid->getPrefix());
 $lime->is('1234567', $userid->getID());
+$lime->is('1234567', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 unset($_SERVER['HTTP_X_DCMGUID']);
 
@@ -24,6 +25,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('icc', $userid->getPrefix());
 $lime->is('xxxxxxxxxxxxxxxxxxxx', $userid->getID());
+$lime->is('iccxxxxxxxxxxxxxxxxxxxx', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 
 
@@ -32,6 +34,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('ser', $userid->getPrefix());
 $lime->is('1234567890a', $userid->getID());
+$lime->is('ser1234567890a', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 
 
@@ -41,6 +44,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('', $userid->getPrefix());
 $lime->is('1234567890ABCDEF', $userid->getID());
+$lime->is('1234567890ABCDEF', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 unset($_SERVER['HTTP_X_JPHONE_UID']);
 
@@ -50,6 +54,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('SN', $userid->getPrefix());
 $lime->is('1234567890ABCDE', $userid->getID());
+$lime->is('SN1234567890ABCDE', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 
 
@@ -59,6 +64,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('', $userid->getPrefix());
 $lime->is('1234567890ABCD_aa.ezweb.ne.jp', $userid->getID());
+$lime->is('1234567890ABCD_aa.ezweb.ne.jp', $userid->getRawData());
 unset($_SERVER['HTTP_X_UP_SUBNO']);
 unset($_SERVER['HTTP_USER_AGENT']);
 
@@ -69,6 +75,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('u', $userid->getPrefix());
 $lime->is('1234567890abcdefgh', $userid->getID());
+$lime->is('1234567890abcdefgh', $userid->getRawData());
 unset($_SERVER['HTTP_X_EM_UID']);
 */
 
@@ -77,6 +84,7 @@ $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->ok('' === $userid->getPrefix());
 $lime->ok('' === $userid->getID());
+$lime->ok('' === $userid->getRawData());
 
 
 require_once 'Net/UserAgent/Mobile/UserID/NonMobile.php';
@@ -84,15 +92,17 @@ class TestModule extends Net_UserAgent_Mobile_UserID_NonMobile
 {
     public function parseID($id = null)
     {
-        return array('a', 'b');
+        return array('a', 'b', 'ab');
     }
 }
 Net_UserAgent_Mobile_UserID::setUserIDModules('NonMobile', array(new TestModule()));
 $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('a', $userid->getPrefix());
 $lime->is('b', $userid->getID());
+$lime->is('ab', $userid->getRawData());
 
 Net_UserAgent_Mobile_UserID::setUserIDModules('NonMobile', null);
 $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->ok('' === $userid->getPrefix());
 $lime->ok('' === $userid->getID());
+$lime->ok('' === $userid->getRawData());

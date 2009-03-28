@@ -8,6 +8,9 @@ class Net_UserAgent_Mobile_UserID
 
     protected $id;
 
+    protected $rawdata;
+
+
     static protected $modules = array(
         'DoCoMo' => array(
             'ImodeID',
@@ -44,6 +47,11 @@ class Net_UserAgent_Mobile_UserID
     public function getID()
     {
         return $this->id;
+    }
+
+    public function getRawData()
+    {
+        return $this->rawdata;
     }
 
 
@@ -97,7 +105,7 @@ class Net_UserAgent_Mobile_UserID
                 }
 
 
-                list($userid->prefix, $userid->id) = $instance->parseID();
+                list($userid->prefix, $userid->id, $userid->rawdata) = $instance->parseID();
                 break;
             } catch (Net_UserAgent_Mobile_UserID_Exception $e) {
                 continue;
