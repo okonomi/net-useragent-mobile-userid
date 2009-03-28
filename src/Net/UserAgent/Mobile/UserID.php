@@ -8,6 +8,29 @@ class Net_UserAgent_Mobile_UserID
 
     protected $id;
 
+    static protected $modules = array(
+        'DoCoMo' => array(
+            'ImodeID',
+            'SerialNumber_FomaCard',
+            'SerialNumber_Device',
+        ),
+        'SoftBank' => array(
+            'UID',
+            'SerialNumber',
+        ),
+        'EZweb' => array(
+            'SubscriberID',
+        ),
+        'Emobile' => array(
+            'UID',
+        ),
+        'Willcom' => array(
+        ),
+        'NonMobile' => array(
+            null,
+        ),
+    );
+
 
     function __construct()
     {
@@ -55,42 +78,25 @@ class Net_UserAgent_Mobile_UserID
             break;
         }
 
-        $modules = array(
-            'DoCoMo' => array(
-                'ImodeID',
-                'SerialNumber_FomaCard',
-                'SerialNumber_Device',
-            ),
-            'SoftBank' => array(
-                'UID',
-                'SerialNumber',
-            ),
-            'EZweb' => array(
-                'SubscriberID',
-            ),
-            'Emobile' => array(
-                'UID',
-            ),
-            'Willcom' => array(
-            ),
-            'NonMobile' => array(
-                null,
-            ),
-        );
-
         $userid = new Net_UserAgent_Mobile_UserID();
 
-        foreach ($modules[$carrier] as $module) {
-            $class     = 'Net_UserAgent_Mobile_UserID_'.$carrier;
-            if ($module !== null) {
-                $class .= '_'.$module;
-            }
-            $filename = str_replace('_', '/', $class).'.php';
-
-            require_once $filename;
-
+        foreach (self::$modules[$carrier] as $module) {
             try {
-                $instance = new $class();
+                if ($module instanceof Net_UserAgent_Mobile_UserID_Abstract) {
+                    $instance = $module;
+                } else {
+                    $class = 'Net_UserAgent_Mobile_UserID_'.$carrier;
+                    if ($module !== null) {
+                        $class .= '_'.$module;
+                    }
+                    $filename = str_replace('_', '/', $class).'.php';
+
+                    require_once $filename;
+
+                    $instance = new $class();
+                }
+
+
                 list($userid->prefix, $userid->id) = $instance->parseID();
                 break;
             } catch (Net_UserAgent_Mobile_UserID_Exception $e) {
@@ -99,5 +105,14 @@ class Net_UserAgent_Mobile_UserID
         }
 
         return $userid;
+    }
+
+    static public function setUserIDModules($carrier, $modules)
+    {
+        if (!is_array($modules)) {
+            $modules = array($modules);
+        }
+
+        self::$modules[$carrier] = $modules;
     }
 }

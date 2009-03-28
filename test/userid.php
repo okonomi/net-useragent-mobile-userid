@@ -75,5 +75,24 @@ unset($_SERVER['HTTP_X_EM_UID']);
 
 $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
-$lime->is(null, $userid->getPrefix());
-$lime->is(null, $userid->getID());
+$lime->ok('' === $userid->getPrefix());
+$lime->ok('' === $userid->getID());
+
+
+require_once 'Net/UserAgent/Mobile/UserID/NonMobile.php';
+class TestModule extends Net_UserAgent_Mobile_UserID_NonMobile
+{
+    public function parseID($id = null)
+    {
+        return array('a', 'b');
+    }
+}
+Net_UserAgent_Mobile_UserID::setUserIDModules('NonMobile', array(new TestModule()));
+$userid = Net_UserAgent_Mobile_UserID::factory();
+$lime->is('a', $userid->getPrefix());
+$lime->is('b', $userid->getID());
+
+Net_UserAgent_Mobile_UserID::setUserIDModules('NonMobile', null);
+$userid = Net_UserAgent_Mobile_UserID::factory();
+$lime->ok('' === $userid->getPrefix());
+$lime->ok('' === $userid->getID());
