@@ -17,7 +17,7 @@ class Net_UserAgent_Mobile_UserID_Emobile_UID extends Net_UserAgent_Mobile_UserI
 
     public function validateID($id)
     {
-        if (preg_match('/^u.{18}$/', $id)) {
+        if (preg_match('/^u.{17}$/', $id)) {
             return true;
         } else {
             return false;

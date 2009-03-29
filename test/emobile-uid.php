@@ -13,16 +13,16 @@ $module = new Net_UserAgent_Mobile_UserID_Emobile_UID();
 
 
 
-$_SERVER['HTTP_X_EM_UID'] = 'u1234567890abcdefgh';
+$_SERVER['HTTP_X_EM_UID'] = 'u1234567890abcdefg';
 $userid = $module->getID();
-$lime->is('u1234567890abcdefgh', $userid);
+$lime->is('u1234567890abcdefg', $userid);
 
 $ret = $module->validateID($userid);
 $lime->is(true, $ret);
 
 list($prefix, $id) = $module->parseID($userid);
 $lime->is('u', $prefix);
-$lime->is('1234567890abcdefgh', $id);
+$lime->is('1234567890abcdefg', $id);
 
 
 
