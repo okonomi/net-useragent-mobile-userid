@@ -95,7 +95,7 @@ class TestModule extends Net_UserAgent_Mobile_UserID_NonMobile
         return array('a', 'b', 'ab');
     }
 }
-Net_UserAgent_Mobile_UserID::setUserIDModules('NonMobile', array(new TestModule()));
+Net_UserAgent_Mobile_UserID::setUserIDModules('NonMobile', new TestModule());
 $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('a', $userid->getPrefix());
 $lime->is('b', $userid->getID());
