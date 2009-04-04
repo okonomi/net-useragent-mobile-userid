@@ -19,6 +19,14 @@ $lime->is('1234567', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 unset($_SERVER['HTTP_X_DCMGUID']);
 
+$_SERVER['HTTP_X_DCMGUID'] = '1234567';
+$userid = Net_UserAgent_Mobile_UserID::factory('docomo');
+$lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
+$lime->is('', $userid->getPrefix());
+$lime->is('1234567', $userid->getID());
+$lime->is('1234567', $userid->getRawData());
+unset($_SERVER['HTTP_X_DCMGUID']);
+
 
 $_SERVER['HTTP_USER_AGENT'] = 'DoCoMo/2.0 P2101V(c100;serXXXXXXXXXXXXXXX;iccxxxxxxxxxxxxxxxxxxxx)';
 $userid = Net_UserAgent_Mobile_UserID::factory();
@@ -48,8 +56,17 @@ $lime->is('1234567890ABCDEF', $userid->getRawData());
 unset($_SERVER['HTTP_USER_AGENT']);
 unset($_SERVER['HTTP_X_JPHONE_UID']);
 
+$_SERVER['HTTP_X_JPHONE_UID'] = '1234567890ABCDEF';
+$userid = Net_UserAgent_Mobile_UserID::factory('softbank');
+$lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
+$lime->is('', $userid->getPrefix());
+$lime->is('1234567890ABCDEF', $userid->getID());
+$lime->is('1234567890ABCDEF', $userid->getRawData());
+unset($_SERVER['HTTP_X_JPHONE_UID']);
 
-$_SERVER['HTTP_USER_AGENT'] = 'Vodafone/1.0/V904SH/SHJ001/SN1234567890ABCDE Browser/VF-NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1';
+
+$_SERVER['HTTP_USER_AGENT'] =
+        'Vodafone/1.0/V904SH/SHJ001/SN1234567890ABCDE Browser/VF-NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1';
 $userid = Net_UserAgent_Mobile_UserID::factory();
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('SN', $userid->getPrefix());
@@ -68,16 +85,22 @@ $lime->is('1234567890ABCD_aa.ezweb.ne.jp', $userid->getRawData());
 unset($_SERVER['HTTP_X_UP_SUBNO']);
 unset($_SERVER['HTTP_USER_AGENT']);
 
+$_SERVER['HTTP_X_UP_SUBNO'] = '1234567890ABCD_aa.ezweb.ne.jp';
+$userid = Net_UserAgent_Mobile_UserID::factory('ezweb');
+$lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
+$lime->is('', $userid->getPrefix());
+$lime->is('1234567890ABCD_aa.ezweb.ne.jp', $userid->getID());
+$lime->is('1234567890ABCD_aa.ezweb.ne.jp', $userid->getRawData());
+unset($_SERVER['HTTP_X_UP_SUBNO']);
 
-/*
-$_SERVER['HTTP_X_EM_UID'] = 'u1234567890abcdefgh';
-$userid = Net_UserAgent_Mobile_UserID::factory();
+
+$_SERVER['HTTP_X_EM_UID'] = 'u1234567890abcdefg';
+$userid = Net_UserAgent_Mobile_UserID::factory('emobile');
 $lime->is('Net_UserAgent_Mobile_UserID', get_class($userid));
 $lime->is('u', $userid->getPrefix());
-$lime->is('1234567890abcdefgh', $userid->getID());
-$lime->is('1234567890abcdefgh', $userid->getRawData());
+$lime->is('1234567890abcdefg', $userid->getID());
+$lime->is('u1234567890abcdefg', $userid->getRawData());
 unset($_SERVER['HTTP_X_EM_UID']);
-*/
 
 
 $userid = Net_UserAgent_Mobile_UserID::factory();

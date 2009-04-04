@@ -55,36 +55,9 @@ class Net_UserAgent_Mobile_UserID
     }
 
 
-    static public function factory(&$agent = null)
+    static public function factory($agent = null)
     {
-        if (is_null($agent)) {
-            include_once 'Net/UserAgent/Mobile.php';
-            $agent =& Net_UserAgent_Mobile::singleton();
-        }
-
-        switch (true) {
-        case $agent->isDoCoMo():
-            $carrier = 'DoCoMo';
-            break;
-        case $agent->isSoftBank():
-            $carrier = 'SoftBank';
-            break;
-        case $agent->isEZweb():
-            $carrier = 'EZweb';
-            break;
-//      case $agent->isEmobile():
-//          $carrier = 'Emobile';
-//          break;
-        case $agent->isWillcom():
-            $carrier = 'Willcom';
-            break;
-        case $agent->isNonMobile():
-            $carrier = 'NonMobile';
-            break;
-        default:
-            throw new Net_UserAgent_Mobile_UserID_Exception();
-            break;
-        }
+        $carrier = self::_getCarrier($agent);
 
         $userid = new Net_UserAgent_Mobile_UserID();
 
@@ -113,6 +86,76 @@ class Net_UserAgent_Mobile_UserID
         }
 
         return $userid;
+    }
+
+    static private function _getCarrier($agent)
+    {
+        if (is_null($agent)) {
+            include_once 'Net/UserAgent/Mobile.php';
+            $agent =& Net_UserAgent_Mobile::singleton();
+        }
+
+        if ($agent instanceof Net_UserAgent_Mobile_Common) {
+            switch (true) {
+            case $agent->isDoCoMo():
+                $carrier = 'DoCoMo';
+                break;
+            case $agent->isSoftBank():
+                $carrier = 'SoftBank';
+                break;
+            case $agent->isEZweb():
+                $carrier = 'EZweb';
+                break;
+//          case $agent->isEmobile():
+//              $carrier = 'Emobile';
+//              break;
+            case $agent->isWillcom():
+                $carrier = 'Willcom';
+                break;
+            case $agent->isNonMobile():
+                $carrier = 'NonMobile';
+                break;
+            }
+        } elseif (is_string($agent)){
+            switch (strtolower($agent)) {
+            case 'docomo':
+            case 'imode':
+            case 'i-mode':
+                $carrier = 'DoCoMo';
+                break;
+            case 'ezweb':
+            case 'au':
+            case 'kddi':
+                $carrier = 'EZweb';
+                break;
+            case 'disney':
+            case 'softbank':
+            case 'vodafone':
+            case 'jphone':
+            case 'j-phone':
+                $carrier = 'SoftBank';
+                break;
+            case 'emobile':
+            case 'e-mobile':
+            case 'em':
+                $carrier = 'Emobile';
+                break;
+            case 'airh':
+            case 'air-h':
+            case 'willcom':
+                $carrier = 'Willcom';
+                break;
+            default:
+                $carrier = 'NonMobile';
+                break;
+            }
+        }
+
+        if (!isset($carrier) || !is_string($carrier)) {
+            throw new Net_UserAgent_Mobile_UserID_Exception();
+        }
+
+        return $carrier;
     }
 
     static public function setUserIDModules($carrier, $modules)
